@@ -1,0 +1,8 @@
+//
+// Created by Maria on 02.03.2026.
+//
+
+#ifndef LIBRARY_PROJECT_BOOK_H
+#define LIBRARY_PROJECT_BOOK_H
+
+#endif //LIBRARY_PROJECT_BOOK_H
