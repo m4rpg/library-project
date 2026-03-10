@@ -1,10 +1,17 @@
 #include "Reader.h"
-Reader::Reader(const std::string& id, const std::string& name)
-    : Person(id, name) {
+#include <utility>
+Reader::Reader(std::string id, std::string name, std::string email)
+    : Person(std::move(id), std::move(name)),
+      email_(std::move(email)) {}
+const std::string& Reader::email() const {
+    return email_;
 }
-std::string Reader::getRole() const {
+std::string Reader::role() const {
     return "Reader";
 }
 std::string Reader::toString() const {
-    return "Reader: " + id_ + " | " + name_;
+    return "Role: " + role() +
+           ", ID: " + id_ +
+           ", Name: " + name_ +
+           ", Email: " + email_;
 }

@@ -1,9 +1,13 @@
 #pragma once
-#include <string>
 #include "Person.h"
+#include <string>
 class Reader : public Person {
+private:
+    std::string email_;
 public:
-    Reader(const std::string& id, const std::string& name);
-    std::string getRole() const override;
+    static constexpr std::size_t kMaxEmailLength = 100;
+    Reader(std::string id, std::string name, std::string email);
+    const std::string& email() const;
+    std::string role() const override;
     std::string toString() const override;
 };
