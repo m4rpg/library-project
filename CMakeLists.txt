@@ -10,6 +10,7 @@ add_library(library_core
         src/readers/ReaderRegistry.cpp
         src/loans/LoanService.cpp
         src/readers/Person.cpp
+        src/readers/Librarian.cpp
 )
 add_executable(library_app
         src/ui/LibraryApp.cpp
