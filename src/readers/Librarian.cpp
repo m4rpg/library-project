@@ -1,10 +1,17 @@
 #include "Librarian.h"
-Librarian::Librarian(const std::string& id, const std::string& name)
-    : Person(id, name) {
+#include <utility>
+Librarian::Librarian(std::string id, std::string name, std::string employeeCode)
+    : Person(std::move(id), std::move(name)),
+      employeeCode_(std::move(employeeCode)) {}
+const std::string& Librarian::employeeCode() const {
+    return employeeCode_;
 }
-std::string Librarian::getRole() const {
+std::string Librarian::role() const {
     return "Librarian";
 }
 std::string Librarian::toString() const {
-    return "Librarian: " + id_ + " | " + name_;
+    return "Role: " + role() +
+           ", ID: " + id_ +
+           ", Name: " + name_ +
+           ", Employee code: " + employeeCode_;
 }
