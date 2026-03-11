@@ -1,4 +1,5 @@
 #include "ReaderRegistry.h"
+#include <algorithm>
 
 void ReaderRegistry::validateReader(const Reader& reader) const {
     if (reader.id().empty()) {
@@ -37,13 +38,13 @@ void ReaderRegistry::addReader(const Reader& reader) {
 }
 
 bool ReaderRegistry::removeReader(const std::string& id) {
-    for (auto it = readers_.begin(); it != readers_.end(); ++it) {
-        if (it->id() == id) {
-            readers_.erase(it);
-            return true;
-        }
-    }
+    auto it = std::find_if(readers_.begin(), readers_.end(),
+        [&id](const Reader& r) { return r.id() == id; });
 
+    if (it != readers_.end()) {
+        readers_.erase(it);
+        return true;
+    }
     return false;
 }
 
