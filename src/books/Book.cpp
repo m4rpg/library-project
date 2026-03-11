@@ -1,6 +1,3 @@
-//
-// Created by Maria on 02.03.2026.
-//
 #include "Book.h"
 #include <string>
 #include <format>
