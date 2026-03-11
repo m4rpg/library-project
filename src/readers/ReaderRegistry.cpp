@@ -63,13 +63,8 @@ std::vector<Reader> ReaderRegistry::listAll() const {
 }
 
 bool ReaderRegistry::exists(const std::string& id) const {
-    for (const auto& reader : readers_) {
-        if (reader.id() == id) {
-            return true;
-        }
-    }
-
-    return false;
+    return std::any_of(readers_.begin(), readers_.end(),
+        [&id](const Reader& r) { return r.id() == id; });
 }
 
 std::size_t ReaderRegistry::size() const {
