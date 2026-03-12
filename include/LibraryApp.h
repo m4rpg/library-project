@@ -25,13 +25,13 @@ public:
         std::string message;
     };
 
-    using ActionResult = std::variant<Success, NotFound, ValidationError,
-    AlreadyExists>;
+    using ActionResult = std::variant<Success, NotFound, ValidationError, AlreadyExists>;
 
 private:
     std::shared_ptr<BookCatalog> catalog_;
     std::shared_ptr<ReaderRegistry> registry_;
     std::unique_ptr<Person> librarian_;
+
     std::unordered_map<std::string, std::string> activeLoans_;
 
     static constexpr int kExitCommand = 0;
@@ -48,9 +48,18 @@ private:
     void showMenu() const;
     void handleResult(const ActionResult& result) const;
 
-    ActionResult addBook(const std::string& id, const std::string& title, const std::string& author, int year);
-    ActionResult addReader(const std::string& id, const std::string& name, const std::string& email);
-    ActionResult issueBook(const std::string& bookId, const std::string& readerId);
+    ActionResult addBook(const std::string& id,
+                         const std::string& title,
+                         const std::string& author,
+                         int year);
+
+    ActionResult addReader(const std::string& id,
+                           const std::string& name,
+                           const std::string& email);
+
+    ActionResult issueBook(const std::string& bookId,
+                           const std::string& readerId);
+
     ActionResult returnBook(const std::string& bookId);
 
     void addBookUI();
@@ -65,7 +74,10 @@ private:
 
 public:
     LibraryApp();
-    LibraryApp(std::shared_ptr<BookCatalog> catalog, std::shared_ptr<ReaderRegistry> registry, std::unique_ptr<Person> librarian);
-    void run();
 
+    LibraryApp(std::shared_ptr<BookCatalog> catalog,
+               std::shared_ptr<ReaderRegistry> registry,
+               std::unique_ptr<Person> librarian);
+
+    void run();
 };
