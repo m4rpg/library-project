@@ -1,23 +1,23 @@
-#ifndef LIBRARY_PROJECT_BOOK_H
-#define LIBRARY_PROJECT_BOOK_H
-
+#pragma once
 #include <string>
 
 class Book {
 private:
-    std::string id;
-    std::string title;
-    std::string author;
-    int year;
+    std::string id_;
+    std::string title_;
+    std::string author_;
+    int year_;
 
 public:
-    Book(std::string id, std::string title, std::string author, int year);
-    
-    const std::string& getId() const;
-    const std::string& getTitle() const;
-    const std::string& getAuthor() const;
-    int getYear() const;
-    std::string to_string() const;
-};
+    static constexpr int kMinYear = 1450;
+    static constexpr int kMaxYear = 2100;
 
-#endif //LIBRARY_PROJECT_BOOK_H
+    Book(std::string id, std::string title, std::string author, int year);
+
+    const std::string& id() const;
+    const std::string& title() const;
+    const std::string& author() const;
+    int year() const;
+
+    std::string toString() const;
+};
