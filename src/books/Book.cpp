@@ -1,27 +1,31 @@
 #include "Book.h"
-#include <string>
-#include <format>
+#include <utility>
 
+Book::Book(std::string id, std::string title, std::string author, int year)
+    : id_(std::move(id)),
+      title_(std::move(title)),
+      author_(std::move(author)),
+      year_(year) {}
 
-Book(std::string id, std::string title, std::string author, int year) : id(std::move(id)), title(std::move(title)),
-    author(std::move(author)), year(year) {}
-
-const std::string& Book::getId() const {
-    return id;
+const std::string& Book::id() const {
+    return id_;
 }
 
-const std::string& Book::getTitle() const {
-    return title;
+const std::string& Book::title() const {
+    return title_;
 }
 
-const std::string& Book::getAuthor() const {
-    return author;
+const std::string& Book::author() const {
+    return author_;
 }
 
-int Book::getYear() const {
-    return year;
+int Book::year() const {
+    return year_;
 }
 
-std::string Book::to_String() const {
-    return std::format("{}: {} by {} ({})", id, title, author, year);
+std::string Book::toString() const {
+    return "ID: " + id_ +
+           ", Title: " + title_ +
+           ", Author: " + author_ +
+           ", Year: " + std::to_string(year_);
 }
