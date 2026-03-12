@@ -1,6 +1,16 @@
+#include "LibraryApp.h"
 #include <iostream>
 
 int main() {
-    std::cout << "Library app started\n";
+    try {
+        LibraryApp app;
+        app.run();
+
+    } catch (const std::exception& e) {
+        std::cerr << "Fatal error: " << e.what() << '\n';
+        return 1;
+
+    }
+
     return 0;
 }
