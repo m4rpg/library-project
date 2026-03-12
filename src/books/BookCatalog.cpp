@@ -1,41 +1,68 @@
 #include "BookCatalog.h"
-#include <algorithm>
 
-void BookCatalog::addBook(Book book) {
-    books.push_back(std::move(book));
+void BookCatalog::validateBook(const Book& book) const {
+    if (book.id().empty()) {
+        throw InvalidBookDataException("Book id cannot be empty");
+    }
+
+    if (book.title().empty()) {
+        throw InvalidBookDataException("Book title cannot be empty");
+    }
+
+    if (book.author().empty()) {
+        throw InvalidBookDataException("Book author cannot be empty");
+    }
+
+    if (book.year() < Book::kMinYear || book.year() > Book::kMaxYear) {
+        throw InvalidBookDataException("Book year is out of allowed range");
+    }
 }
 
-std::optional<Book> BookCatalog::searchById(const std::string& id) const {
-    for (const auto& book : books) {
-        if (book.getId == id) {
-            return book;
+void BookCatalog::addBook(const Book& book) {
+    validateBook(book);
+
+    if (exists(book.id())) {
+        throw DuplicateBookException(book.id());
+    }
+
+    books_.push_back(book);
+}
+
+bool BookCatalog::removeBook(const std::string& id) {
+    for (auto it = books_.begin(); it != books_.end(); ++it) {
+        if (it->id() == id) {
+            books_.erase(it);
+            return true;
         }
     }
-    return std::nullopt;
-}
 
-bool BookCatalog::removeById(const std::string& id) const {
-    auto it = std::remove_if(books.begin(), books.end(), [&id](const Book& b) { return b.getId() == id; });
-    
-    if (it != books.end()) {
-        books.erase(it, books.end());
-        return true;
-    }
     return false;
 }
 
-const std::vector<Book>& BookCatalog::listAll() const {
-    return books;
+std::optional<Book> BookCatalog::findById(const std::string& id) const {
+    for (const auto& book : books_) {
+        if (book.id() == id) {
+            return book;
+        }
+    }
+
+    return std::nullopt;
 }
 
-bool BookCatalog::is_existed(const std::string& id) const {
-    return searchById(id).has_value();
+std::vector<Book> BookCatalog::listAll() const {
+    return books_;
 }
 
-size_t BookCatalog::size() const {
-    return books.size();
+bool BookCatalog::exists(const std::string& id) const {
+    for (const auto& book : books_) {
+        if (book.id() == id) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
-void BookCatalog::clear() {
-    books.clear();
+std::size_t BookCatalog::size() const {
+    return books_.size();
 }
