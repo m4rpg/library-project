@@ -19,10 +19,6 @@ add_library(library_core
 
 add_executable(library_app
         src/ui/main.cpp
-        tests/test_books.cpp
-        tests/test_readers.cpp
-        tests/test_people.cpp
-        tests/test_library_app.cpp
 )
 
 target_link_libraries(library_app PRIVATE library_core)
@@ -32,6 +28,7 @@ include(FetchContent)
 FetchContent_Declare(
         googletest
         URL https://github.com/google/googletest/archive/refs/tags/v1.14.0.zip
+        DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
 
 FetchContent_MakeAvailable(googletest)
