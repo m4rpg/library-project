@@ -31,7 +31,6 @@ private:
     std::shared_ptr<BookCatalog> catalog_;
     std::shared_ptr<ReaderRegistry> registry_;
     std::unique_ptr<Person> librarian_;
-
     std::unordered_map<std::string, std::string> activeLoans_;
 
     static constexpr int kExitCommand = 0;
@@ -47,20 +46,6 @@ private:
 
     void showMenu() const;
     void handleResult(const ActionResult& result) const;
-
-    ActionResult addBook(const std::string& id,
-                         const std::string& title,
-                         const std::string& author,
-                         int year);
-
-    ActionResult addReader(const std::string& id,
-                           const std::string& name,
-                           const std::string& email);
-
-    ActionResult issueBook(const std::string& bookId,
-                           const std::string& readerId);
-
-    ActionResult returnBook(const std::string& bookId);
 
     void addBookUI();
     void addReaderUI();
@@ -78,6 +63,20 @@ public:
     LibraryApp(std::shared_ptr<BookCatalog> catalog,
                std::shared_ptr<ReaderRegistry> registry,
                std::unique_ptr<Person> librarian);
+
+    ActionResult addBook(const std::string& id,
+                         const std::string& title,
+                         const std::string& author,
+                         int year);
+
+    ActionResult addReader(const std::string& id,
+                           const std::string& name,
+                           const std::string& email);
+
+    ActionResult issueBook(const std::string& bookId,
+                           const std::string& readerId);
+
+    ActionResult returnBook(const std::string& bookId);
 
     void run();
 };
