@@ -22,6 +22,7 @@ add_executable(library_app
         tests/test_books.cpp
         tests/test_readers.cpp
         tests/test_people.cpp
+        tests/test_library_app.cpp
 )
 
 target_link_libraries(library_app PRIVATE library_core)
