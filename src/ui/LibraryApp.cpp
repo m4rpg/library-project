@@ -1,5 +1,4 @@
 #include "LibraryApp.h"
-
 #include <iostream>
 #include <limits>
 #include <stdexcept>
@@ -48,7 +47,7 @@ LibraryApp::ActionResult LibraryApp::addBook(const std::string& id,
                                              const std::string& author,
                                              int year) {
     try {
-        if (catalog_->is_existed(id)) {
+        if (catalog_->exists(id)) {
             return AlreadyExists{"Book with this id already exists"};
         }
 
@@ -76,7 +75,7 @@ LibraryApp::ActionResult LibraryApp::addReader(const std::string& id,
 
 LibraryApp::ActionResult LibraryApp::issueBook(const std::string& bookId,
                                                const std::string& readerId) {
-    if (!catalog_->is_existed(bookId)) {
+    if (!catalog_->exists(bookId)) {
         return NotFound{"Book not found"};
     }
 
@@ -94,7 +93,6 @@ LibraryApp::ActionResult LibraryApp::issueBook(const std::string& bookId,
 
 LibraryApp::ActionResult LibraryApp::returnBook(const std::string& bookId) {
     auto it = activeLoans_.find(bookId);
-
     if (it == activeLoans_.end()) {
         return NotFound{"This book is not currently issued"};
     }
@@ -144,12 +142,14 @@ void LibraryApp::addReaderUI() {
 
 void LibraryApp::findBookUI() const {
     std::string id;
+
     std::cout << "Enter book id: ";
     std::getline(std::cin, id);
 
-    auto result = catalog_->searchById(id);
+    auto result = catalog_->findById(id);
+
     if (result.has_value()) {
-        std::cout << result->to_string() << '\n';
+        std::cout << result->toString() << '\n';
     } else {
         std::cout << "Book not found\n";
     }
@@ -157,10 +157,12 @@ void LibraryApp::findBookUI() const {
 
 void LibraryApp::findReaderUI() const {
     std::string id;
+
     std::cout << "Enter reader id: ";
     std::getline(std::cin, id);
 
     auto result = registry_->findById(id);
+
     if (result.has_value()) {
         std::cout << result->toString() << '\n';
     } else {
@@ -177,7 +179,7 @@ void LibraryApp::listBooksUI() const {
     }
 
     for (const auto& book : books) {
-        std::cout << book.to_string() << '\n';
+        std::cout << book.toString() << '\n';
     }
 }
 
@@ -227,7 +229,7 @@ void LibraryApp::removeBookUI() {
         return;
     }
 
-    if (catalog_->removeById(id)) {
+    if (catalog_->removeBook(id)) {
         std::cout << "Book removed successfully\n";
     } else {
         std::cout << "Book not found\n";
