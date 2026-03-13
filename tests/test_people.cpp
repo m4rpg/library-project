@@ -2,31 +2,34 @@
 #include "Librarian.h"
 #include "Reader.h"
 
-TEST(PersonTest, ReaderRoleIsCorrect) {
+TEST(PersonHierarchyTest, ReaderRoleIsCorrect) {
     Reader reader("r1", "Maria", "maria@mail.com");
 
     EXPECT_EQ(reader.role(), "Reader");
 }
 
-TEST(PersonTest, LibrarianRoleIsCorrect) {
+TEST(PersonHierarchyTest, LibrarianRoleIsCorrect) {
     Librarian librarian("l1", "Alexander", "EMP001");
 
     EXPECT_EQ(librarian.role(), "Librarian");
 }
 
-TEST(PersonTest, LibrarianStoresEmployeeCode) {
-    Librarian librarian("l1", "George", "EMP777");
+TEST(PersonHierarchyTest, LibrarianStoresEmployeeCode) {
+    Librarian librarian("l2", "George", "EMP777");
 
     EXPECT_EQ(librarian.employeeCode(), "EMP777");
 }
 
-TEST(PersonTest, PolymorphismWorksForPeople) {
+TEST(PersonHierarchyTest, ReaderCanBeUsedPolymorphically) {
     Reader reader("r1", "Maria", "maria@mail.com");
+    Person* person = &reader;
+
+    EXPECT_EQ(person->role(), "Reader");
+}
+
+TEST(PersonHierarchyTest, LibrarianCanBeUsedPolymorphically) {
     Librarian librarian("l1", "Alexander", "EMP001");
+    Person* person = &librarian;
 
-    Person* p1 = &reader;
-    Person* p2 = &librarian;
-
-    EXPECT_EQ(p1->role(), "Reader");
-    EXPECT_EQ(p2->role(), "Librarian");
+    EXPECT_EQ(person->role(), "Librarian");
 }

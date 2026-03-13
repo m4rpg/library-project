@@ -4,6 +4,7 @@ project(library_project)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 include_directories(include)
 
@@ -14,6 +15,7 @@ add_library(library_core
         src/readers/Librarian.cpp
         src/readers/Reader.cpp
         src/readers/ReaderRegistry.cpp
+        src/loans/LoanService.cpp
         src/ui/LibraryApp.cpp
 )
 

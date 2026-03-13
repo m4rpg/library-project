@@ -8,15 +8,18 @@
 LibraryApp::LibraryApp()
     : catalog_(std::make_shared<BookCatalog>()),
       registry_(std::make_shared<ReaderRegistry>()),
-      librarian_(std::make_unique<Librarian>("lib1", "Main Librarian", "EMP001")) {}
+      librarian_(std::make_unique<Librarian>("lib1", "Main Librarian", "EMP001")),
+      loanService_(std::make_shared<LoanService>(*catalog_, *registry_)) {}
 
 LibraryApp::LibraryApp(std::shared_ptr<BookCatalog> catalog,
                        std::shared_ptr<ReaderRegistry> registry,
-                       std::unique_ptr<Person> librarian)
+                       std::unique_ptr<Person> librarian,
+                       std::shared_ptr<LoanService> loanService)
     : catalog_(std::move(catalog)),
       registry_(std::move(registry)),
-      librarian_(std::move(librarian)) {
-    if (!catalog_ || !registry_ || !librarian_) {
+      librarian_(std::move(librarian)),
+      loanService_(std::move(loanService)) {
+    if (!catalog_ || !registry_ || !librarian_ || !loanService_) {
         throw std::invalid_argument("LibraryApp dependencies cannot be null");
     }
 }
@@ -83,22 +86,23 @@ LibraryApp::ActionResult LibraryApp::issueBook(const std::string& bookId,
         return NotFound{"Reader not found"};
     }
 
-    if (activeLoans_.contains(bookId)) {
+    if (loanService_->isBookLoaned(bookId)) {
         return AlreadyExists{"This book is already issued"};
     }
 
-    activeLoans_[bookId] = readerId;
-    return Success{"Book issued successfully"};
+    if (loanService_->loanBook(bookId, readerId)) {
+        return Success{"Book issued successfully"};
+    }
+
+    return ValidationError{"Failed to issue book"};
 }
 
 LibraryApp::ActionResult LibraryApp::returnBook(const std::string& bookId) {
-    auto it = activeLoans_.find(bookId);
-    if (it == activeLoans_.end()) {
-        return NotFound{"This book is not currently issued"};
+    if (loanService_->returnBook(bookId)) {
+        return Success{"Book returned successfully"};
     }
 
-    activeLoans_.erase(it);
-    return Success{"Book returned successfully"};
+    return NotFound{"This book is not currently issued"};
 }
 
 void LibraryApp::addBookUI() {
@@ -224,7 +228,7 @@ void LibraryApp::removeBookUI() {
     std::cout << "Enter book id: ";
     std::getline(std::cin, id);
 
-    if (activeLoans_.contains(id)) {
+    if (loanService_->isBookLoaned(id)) {
         std::cout << "Cannot remove a book that is currently issued\n";
         return;
     }

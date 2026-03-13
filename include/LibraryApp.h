@@ -1,10 +1,10 @@
 #pragma once
 #include <memory>
 #include <string>
-#include <unordered_map>
 #include <variant>
 #include "BookCatalog.h"
 #include "Librarian.h"
+#include "LoanService.h"
 #include "ReaderRegistry.h"
 
 class LibraryApp {
@@ -31,7 +31,7 @@ private:
     std::shared_ptr<BookCatalog> catalog_;
     std::shared_ptr<ReaderRegistry> registry_;
     std::unique_ptr<Person> librarian_;
-    std::unordered_map<std::string, std::string> activeLoans_;
+    std::shared_ptr<LoanService> loanService_;
 
     static constexpr int kExitCommand = 0;
     static constexpr int kAddBookCommand = 1;
@@ -62,7 +62,8 @@ public:
 
     LibraryApp(std::shared_ptr<BookCatalog> catalog,
                std::shared_ptr<ReaderRegistry> registry,
-               std::unique_ptr<Person> librarian);
+               std::unique_ptr<Person> librarian,
+               std::shared_ptr<LoanService> loanService);
 
     ActionResult addBook(const std::string& id,
                          const std::string& title,
